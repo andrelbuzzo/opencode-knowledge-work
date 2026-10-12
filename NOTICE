@@ -1,0 +1,16 @@
+opencode-knowledge-work
+Copyright 2026 Andre Buzzo
+
+This product includes software developed at Anthropic, PBC.
+
+The contents of the `content/` directory are vendored from
+https://github.com/anthropics/knowledge-work-plugins and are licensed under
+the Apache License, Version 2.0. The upstream copyright notice is retained in
+`LICENSE`.
+
+Modifications made in this repository:
+  - Skill directories are namespaced with their plugin name to prevent skill ID
+    collisions across plugins (applied by `scripts/sync-upstream.ts`).
+  - The `partner-built` and `cowork-plugin-management` plugins are excluded.
+
+Skill and command file bodies are otherwise unmodified from upstream.

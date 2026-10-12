@@ -1,0 +1,86 @@
+{
+  "upstream": "https://github.com/anthropics/knowledge-work-plugins",
+  "sha": "02ffa99ff00ce4d3046ccebabb8357cb39f3ab06",
+  "plugins": {
+    "bio-research": {
+      "skills": 6,
+      "commands": 0,
+      "servers": 11
+    },
+    "customer-support": {
+      "skills": 5,
+      "commands": 0,
+      "servers": 8
+    },
+    "data": {
+      "skills": 10,
+      "commands": 0,
+      "servers": 8
+    },
+    "design": {
+      "skills": 7,
+      "commands": 0,
+      "servers": 9
+    },
+    "engineering": {
+      "skills": 10,
+      "commands": 0,
+      "servers": 10
+    },
+    "enterprise-search": {
+      "skills": 5,
+      "commands": 0,
+      "servers": 7
+    },
+    "finance": {
+      "skills": 8,
+      "commands": 0,
+      "servers": 6
+    },
+    "human-resources": {
+      "skills": 9,
+      "commands": 0,
+      "servers": 5
+    },
+    "legal": {
+      "skills": 9,
+      "commands": 0,
+      "servers": 7
+    },
+    "marketing": {
+      "skills": 8,
+      "commands": 0,
+      "servers": 13
+    },
+    "operations": {
+      "skills": 9,
+      "commands": 0,
+      "servers": 6
+    },
+    "pdf-viewer": {
+      "skills": 1,
+      "commands": 4,
+      "servers": 1
+    },
+    "product-management": {
+      "skills": 8,
+      "commands": 1,
+      "servers": 16
+    },
+    "productivity": {
+      "skills": 4,
+      "commands": 0,
+      "servers": 9
+    },
+    "sales": {
+      "skills": 36,
+      "commands": 0,
+      "servers": 23
+    },
+    "small-business": {
+      "skills": 44,
+      "commands": 0,
+      "servers": 35
+    }
+  }
+}
