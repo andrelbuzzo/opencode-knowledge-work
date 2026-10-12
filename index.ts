@@ -1,4 +1,3 @@
-import { define } from "@opencode-ai/plugin/v2/promise"
 import { existsSync, readFileSync, readdirSync } from "node:fs"
 import { basename, dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -7,11 +6,12 @@ const CONTENT = resolve(dirname(fileURLToPath(import.meta.url)), "content")
 
 type SkillEntry = { id: string; name: string; description: string; path: string; content: string }
 
-// @opencode-ai/plugin v1.19 ships declarations that lag the running server: the
-// real context exposes `app.log`, and the real skill editor exposes `add`. Both
-// verified against opencode v2.0.24. Declared narrowly here rather than casting
-// `any` at each call site.
-type Runtime = {
+// OpenCode's Plugin.define is `(plugin) => plugin`, so declaring the shape
+// locally removes the only dependency. That matters: a dependency-free package
+// loads from a bare clone or unpacked tarball, where OpenCode does not install
+// deps for local-directory plugin specs.
+type PluginContext = {
+  options: Record<string, unknown>
   app: { log: { warn(message: string): void } }
   skill: { transform(cb: (editor: { add(skill: SkillEntry): void }) => void): Promise<unknown> }
 }
@@ -25,7 +25,7 @@ function available(): string[] {
 }
 
 // Only `name` and `description` matter here, and both are single-line in every
-// vendored SKILL.md. A full YAML parser would be a dependency for nothing.
+// vendored SKILL.md. A YAML parser would be a dependency for nothing.
 function frontmatter(raw: string): { name?: string; description?: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
   if (!match) return {}
@@ -37,11 +37,10 @@ function frontmatter(raw: string): { name?: string; description?: string } {
   return out
 }
 
-export default define({
+export default {
   id: "opencode.knowledge-work",
 
-  async setup(ctx) {
-    const runtime = ctx as unknown as Runtime
+  async setup(ctx: PluginContext) {
     const all = available()
     if (all.length === 0) return
 
@@ -55,10 +54,10 @@ export default define({
 
     const unknown = [...wanted].filter((n) => !all.includes(n))
     if (unknown.length > 0) {
-      runtime.app.log.warn(`opencode-knowledge-work: unknown plugin(s) ${unknown.join(", ")}; available: ${all.join(", ")}`)
+      ctx.app.log.warn(`opencode-knowledge-work: unknown plugin(s) ${unknown.join(", ")}; available: ${all.join(", ")}`)
     }
 
-    const entries: { id: string; name: string; description: string; path: string; content: string }[] = []
+    const entries: SkillEntry[] = []
     for (const plugin of selected) {
       const skillsDir = join(CONTENT, plugin, "skills")
       for (const entry of readdirSync(skillsDir, { withFileTypes: true })) {
@@ -68,7 +67,7 @@ export default define({
         const meta = frontmatter(raw)
         if (!meta.description) continue
         entries.push({
-          id: basename(entry.name), // already namespaced with the plugin by scripts/sync-upstream.ts
+          id: basename(entry.name), // namespaced by scripts/sync-upstream.ts
           name: meta.name ?? basename(entry.name),
           description: meta.description,
           path: file,
@@ -77,8 +76,8 @@ export default define({
       }
     }
 
-    await runtime.skill.transform((editor) => {
+    await ctx.skill.transform((editor) => {
       for (const skill of entries) editor.add(skill)
     })
   },
-})
+}

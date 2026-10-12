@@ -1,6 +1,6 @@
 {
   "name": "opencode-knowledge-work",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Anthropic's knowledge-work plugin collection, adapted for OpenCode",
   "type": "module",
   "main": "./index.ts",
@@ -23,9 +23,7 @@
     "knowledge-work"
   ],
   "license": "Apache-2.0",
-  "dependencies": {
-    "@opencode-ai/plugin": "^1.18.32"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^24.12.2",
     "typescript": "^5.8.2"
